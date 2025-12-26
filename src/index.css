@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+@layer components {
+  .input-dark {
+    @apply w-full px-4 py-3 rounded-lg
+    bg-[#0F0F0F] border border-[#2A2A2A]
+    text-[#EDEDED] placeholder-[#8A8A8A]
+    focus:outline-none focus:border-[#2563EB];
+  }
+}
