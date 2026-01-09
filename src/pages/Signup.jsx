@@ -60,7 +60,7 @@ export default function Signup() {
             <input
               type="text"
               name="full_name"
-              value={form.name}
+              value={form.full_name}
               onChange={handleChange}
               placeholder="Full name"
               className="w-full px-4 py-3 rounded-lg border border-[#D0D0D0]"
