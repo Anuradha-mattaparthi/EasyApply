@@ -2,7 +2,7 @@ import React, { useState }  from "react";
 
 export default function Signup() {
   const [form, setForm] = useState({
-    name: "",
+    full_name: "",
     email: "",
     password: ""
   });
@@ -20,7 +20,7 @@ export default function Signup() {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          name: form.name,
+          name: form.full_name,
           email: form.email,
           password: form.password
         })
