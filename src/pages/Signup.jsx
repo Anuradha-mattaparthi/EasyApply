@@ -20,7 +20,7 @@ export default function Signup() {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          name: form.full_name,
+          full_name: form.full_name,
           email: form.email,
           password: form.password
         })
