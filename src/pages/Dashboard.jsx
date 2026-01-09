@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { logout } from "../services/api";
 
 export default function Dashboard() {
   return (
@@ -24,6 +25,12 @@ export default function Dashboard() {
           >
             Basic Details →
           </Link>
+        <button
+        onClick={logout}
+        className="text-sm text-red-600 hover:underline"
+        >
+        Logout
+        </button>
         </div>
 
         {/* Stats Cards */}
