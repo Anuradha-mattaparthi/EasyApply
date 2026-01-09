@@ -10,6 +10,7 @@ export default function Signup() {
           <h1 className="text-4xl font-medium text-[#1A1A1A] mb-4">
             Create your account
           </h1>
+          
           <p className="text-[#5A5A5A] mb-10">
             Start using Easy Apply in minutes.
           </p>
