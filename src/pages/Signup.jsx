@@ -59,7 +59,7 @@ export default function Signup() {
 
             <input
               type="text"
-              name="name"
+              name="full_name"
               value={form.name}
               onChange={handleChange}
               placeholder="Full name"
