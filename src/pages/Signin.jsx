@@ -1,54 +1,57 @@
-import React from "react";
+import React, { useState } from "react";
 
 export default function Signin() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      const res = await fetch("https://smartapply-7msy.onrender.com/api/auth/signin/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error("Invalid credentials");
+
+      localStorage.setItem("access", data.access);
+      localStorage.setItem("refresh", data.refresh);
+      window.location.href = "/dashboard";
+
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen grid md:grid-cols-10 font-mono">
-      
-      {/* LEFT – 30% BLACK */}
-      <div className="md:col-span-3 bg-linear-to-b from-[#2A2A2A] via-[#1C1C1C] to-[#0B0B0B] text-white flex items-center justify-center px-6">
-        <div className="text-center max-w-xs">
-          <h2 className="text-2xl font-medium mb-4">
-            Welcome back
-          </h2>
-          <p className="text-[#B5B5B5] text-sm leading-relaxed">
-            Sign in to continue your job search journey.
-          </p>
-        </div>
+      <div className="md:col-span-3 bg-black text-white flex items-center justify-center">
+        Welcome Back
       </div>
 
-      {/* RIGHT – 70% GREY */}
-      <div className="md:col-span-7 bg-[#F2F2F2] flex items-center justify-center px-6">
-        <div className="max-w-md w-full">
-          <h1 className="text-4xl font-medium text-[#1A1A1A] mb-4">
-            Sign in
-          </h1>
-          <p className="text-[#5A5A5A] mb-10">
-            Access your Easy Apply dashboard.
-          </p>
+      <div className="md:col-span-7 bg-gray-100 flex items-center justify-center">
+        <form className="space-y-4" onSubmit={handleSubmit}>
+          <h1 className="text-3xl">Sign In</h1>
 
-          <form className="space-y-6">
-            <input
-              type="email"
-              placeholder="Email address"
-              className="w-full px-4 py-3 rounded-lg border border-[#D0D0D0] focus:outline-none focus:border-[#2563EB]"
-            />
+          {error && <p className="text-red-600">{error}</p>}
 
-            <input
-              type="password"
-              placeholder="Password"
-              className="w-full px-4 py-3 rounded-lg border border-[#D0D0D0] focus:outline-none focus:border-[#2563EB]"
-            />
+          <input type="email" placeholder="Email" onChange={e=>setEmail(e.target.value)} required className="w-full p-3"/>
+          <input type="password" placeholder="Password" onChange={e=>setPassword(e.target.value)} required className="w-full p-3"/>
 
-            <button
-              type="submit"
-              className="w-full bg-[#2563EB] text-white py-3 rounded-lg hover:bg-[#1D4ED8] transition"
-            >
-              Sign in
-            </button>
-          </form>
-        </div>
+          <button className="bg-blue-600 text-white p-3 w-full">
+            {loading ? "Signing in..." : "Login"}
+          </button>
+        </form>
       </div>
-
     </div>
   );
 }
