@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 
 export default function Signin() {
+
+  if (localStorage.getItem("access")) {
+    return <Navigate to="/dashboard" />;
+  }
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");

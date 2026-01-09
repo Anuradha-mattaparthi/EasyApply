@@ -1,12 +1,21 @@
 import React, { useState }  from "react";
+import { Navigate } from "react-router-dom";
+
+
 
 export default function Signup() {
+
+  if (localStorage.getItem("access")) {
+    return <Navigate to="/dashboard" />;
+  }
   const [form, setForm] = useState({
     full_name: "",
     email: "",
     password: ""
   });
+  
 
+  
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
