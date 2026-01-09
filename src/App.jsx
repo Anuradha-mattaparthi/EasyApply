@@ -4,6 +4,8 @@ import Signup from "./pages/Signup";
 import Signin from "./pages/Signin";
 import Dashboard from "./pages/Dashboard";
 import BasicDetails from "./pages/BasicDetails";
+import PrivateRoute from "./PrivateRoute";
+
 function App() {
   return (
     <Routes>
@@ -11,9 +13,15 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/signin" element={<Signin />} />
-      <PrivateRoute>
+      <Route
+        path="/dashboard"
+        element={
+          <PrivateRoute>
             <Dashboard />
           </PrivateRoute>
+        }
+      />
+
       <Route path="/profile" element={<BasicDetails />} />
     </Routes>
   );
