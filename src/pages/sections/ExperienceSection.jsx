@@ -19,7 +19,7 @@ export default function ExperienceSection() {
 
   const [loading, setLoading] = useState(false);
 
-  const token = localStorage.getItem("access_token");
+  const token = localStorage.getItem("access");
 
   const API_URL = "https://smartapply-7msy.onrender.com/api/me/resume/work-experience/";
 
@@ -108,9 +108,9 @@ export default function ExperienceSection() {
     }
   };
 
-  if (!token) {
+  /*if (!token) {
     return <p>Please login to manage experience</p>;
-  }
+  }*/  
 
   return (
     <Accordion title="Work Experience">

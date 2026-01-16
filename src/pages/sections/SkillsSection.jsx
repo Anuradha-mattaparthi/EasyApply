@@ -12,7 +12,7 @@ export default function SkillsSection() {
 
   const [loading, setLoading] = useState(false);
 
-  const token = localStorage.getItem("access_token");
+  const token = localStorage.getItem("access");
 
   const API_URL = "https://smartapply-7msy.onrender.com/api/me/resume/skills/";
 
