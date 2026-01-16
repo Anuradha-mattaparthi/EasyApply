@@ -22,9 +22,7 @@ function App() {
         }
       />
 
-      <Route path="/profile" element={ <PrivateRoute>
-            <ResumeEditor  />
-          </PrivateRoute>} />
+      <Route path="/profile" element={ <ResumeEditor/> } />
     </Routes>
   );
 }

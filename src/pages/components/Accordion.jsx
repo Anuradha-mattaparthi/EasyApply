@@ -6,7 +6,7 @@ export default function Accordion({ title, children }) {
   return (
     <div className="bg-[#0f0f0f] border border-[#222] rounded-xl p-4 text-white">
 
-      {/* ONLY HEADER CLICKABLE */}
+      {/* HEADER ONLY should toggle */}
       <div
         className="flex justify-between items-center cursor-pointer"
         onClick={() => setOpen(!open)}
@@ -21,7 +21,7 @@ export default function Accordion({ title, children }) {
       {open && (
         <div
           className="mt-6"
-          onClick={(e) => e.stopPropagation()}   // 🔥 IMPORTANT FIX
+          onClick={(e) => e.stopPropagation()}   // 🔥 THIS LINE FIXES EVERYTHING
         >
           {children}
         </div>
