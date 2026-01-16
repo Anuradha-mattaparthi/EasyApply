@@ -93,9 +93,9 @@ export default function HeaderSection() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Default action -> PATCH (recommended)
-    handlePatch();
+    console.log("SUBMIT CLICKED");
+    console.log("Current Form Data:", formData);    // Default action -> PATCH (recommended)
+    handlePut();
   };
 
   return (
@@ -196,6 +196,9 @@ export default function HeaderSection() {
 
         <div className="flex gap-4">
 
+          <button type="submit" className="editor-btn fgdf">
+            Save (PATCH)
+          </button>
 
           <button
             type="button"
