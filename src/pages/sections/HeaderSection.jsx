@@ -18,7 +18,7 @@ export default function HeaderSection() {
 
   const [loading, setLoading] = useState(false);
 
-  const token = localStorage.getItem("access_token");   // adjust based on your auth flow
+  const token = localStorage.getItem("access");   // adjust based on your auth flow
 
   const API_URL = "https://smartapply-7msy.onrender.com/api/me/resume/header/";
 
