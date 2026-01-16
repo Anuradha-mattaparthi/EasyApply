@@ -22,7 +22,9 @@ function App() {
         }
       />
 
-      <Route path="/profile" element={<BasicDetails />} />
+      <Route path="/profile" element={ <PrivateRoute>
+            <BasicDetails  />
+          </PrivateRoute>} />
     </Routes>
   );
 }
