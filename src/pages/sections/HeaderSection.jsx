@@ -198,11 +198,12 @@ export default function HeaderSection() {
 
         <button
   type="submit"
+  onClick={() => console.log("BUTTON CLICK WORKING")}
   className="editor-btn"
-  onClick={(e) => e.stopPropagation()}
 >
   Save (PATCH)
 </button>
+
 
 
           <button
