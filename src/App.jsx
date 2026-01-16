@@ -3,8 +3,8 @@ import Home from "./pages/home";
 import Signup from "./pages/Signup";
 import Signin from "./pages/Signin";
 import Dashboard from "./pages/Dashboard";
-import BasicDetails from "./pages/BasicDetails";
 import PrivateRoute from "./routes/PrivateRoute";
+import ResumeEditor from "./pages/ResumeEditor";
 
 function App() {
   return (
@@ -23,7 +23,7 @@ function App() {
       />
 
       <Route path="/profile" element={ <PrivateRoute>
-            <BasicDetails  />
+            <ResumeEditor  />
           </PrivateRoute>} />
     </Routes>
   );
