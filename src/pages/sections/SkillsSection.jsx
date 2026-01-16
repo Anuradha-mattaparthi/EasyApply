@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Accordion from "../components/Accordion";
-import axios from "axios";
+import API from "../services/api";
+import Swal from "sweetalert2";
 
 export default function SkillsSection() {
 
@@ -12,35 +13,35 @@ export default function SkillsSection() {
 
   const [loading, setLoading] = useState(false);
 
-  const token = localStorage.getItem("access");
-
-  const API_URL = "https://smartapply-7msy.onrender.com/api/me/resume/skills/";
+  const API_URL = "/api/me/resume/skills/";
 
   // ----------- GET SKILLS -----------
   const fetchSkills = async () => {
     try {
       setLoading(true);
 
-      const res = await axios.get(API_URL, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      const res = await API.get(API_URL);
 
       setSkills(res.data);
 
     } catch (error) {
       console.log("Error fetching skills:", error);
+
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to load skills",
+        icon: "error",
+        confirmButtonText: "OK"
+      });
+
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (token) {
-      fetchSkills();
-    }
-  }, [token]);
+    fetchSkills();
+  }, []);
 
   // ----------- HANDLE CHANGE -----------
   const handleChange = (e) => {
@@ -55,46 +56,56 @@ export default function SkillsSection() {
     e.preventDefault();
 
     try {
-      await axios.post(API_URL, newSkill, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      await API.post(API_URL, newSkill);
 
-      alert("Skill Added Successfully");
+      Swal.fire({
+        title: "Success!",
+        text: "Skill Added Successfully",
+        icon: "success",
+        confirmButtonText: "OK"
+      });
 
       setNewSkill({ name: "", category: "" });
 
       fetchSkills();
 
     } catch (error) {
-      console.log("Error creating skill:", error.response);
-      alert("Failed to add skill");
+      console.log("Error creating skill:", error);
+
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to add skill",
+        icon: "error",
+        confirmButtonText: "OK"
+      });
     }
   };
 
   // ----------- DELETE SKILL -----------
   const deleteSkill = async (id) => {
     try {
-      await axios.delete(`${API_URL}${id}/`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      await API.delete(`${API_URL}${id}/`);
 
-      alert("Skill Deleted");
+      Swal.fire({
+        title: "Success!",
+        text: "Skill removed Successfully",
+        icon: "success",
+        confirmButtonText: "OK"
+      });
 
       fetchSkills();
 
     } catch (error) {
-      console.log("Delete Error:", error.response);
-      alert("Failed to delete skill");
+      console.log("Delete Error:", error);
+
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to delete skill",
+        icon: "error",
+        confirmButtonText: "OK"
+      });
     }
   };
-
-  if (!token) {
-    return <p>Please login to manage skills</p>;
-  }
 
   return (
     <Accordion title="Skills">

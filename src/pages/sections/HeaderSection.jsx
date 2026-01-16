@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Accordion from "../components/Accordion";
-import axios from "axios";
+import API from "../services/api";
+import Swal from "sweetalert2";
 
 export default function HeaderSection() {
 
@@ -18,25 +19,27 @@ export default function HeaderSection() {
 
   const [loading, setLoading] = useState(false);
 
-  const token = localStorage.getItem("access");   // adjust based on your auth flow
-
-  const API_URL = "https://smartapply-7msy.onrender.com/api/me/resume/header/";
+  const API_URL = "/api/me/resume/header/";
 
   // ---------------- GET DATA ----------------
   const fetchHeader = async () => {
     try {
       setLoading(true);
 
-      const res = await axios.get(API_URL, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      const res = await API.get(API_URL);
 
       setFormData(res.data);
 
     } catch (error) {
       console.log("Error fetching header:", error);
+
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to load header information",
+        icon: "error",
+        confirmButtonText: "OK"
+      });
+
     } finally {
       setLoading(false);
     }
@@ -44,10 +47,8 @@ export default function HeaderSection() {
 
   // Load data when component mounts
   useEffect(() => {
-    if (token) {
-      fetchHeader();
-    }
-  }, [token]);
+    fetchHeader();
+  }, []);
 
   // ---------------- HANDLE INPUT CHANGE ----------------
   const handleChange = (e) => {
@@ -60,42 +61,30 @@ export default function HeaderSection() {
   // ---------------- PATCH UPDATE ----------------
   const handlePatch = async () => {
     try {
-      await axios.patch(API_URL, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      await API.patch(API_URL, formData);
 
-      alert("Header Updated Successfully (PATCH)");
+      Swal.fire({
+        title: "Success!",
+        text: "Header Updated Successfully",
+        icon: "success",
+        confirmButtonText: "OK"
+      });
 
     } catch (error) {
       console.log("Patch Error:", error);
-      alert("Failed to update header");
-    }
-  };
 
-  // ---------------- PUT UPDATE ----------------
-  const handlePut = async () => {
-    try {
-      await axios.put(API_URL, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to update header",
+        icon: "error",
+        confirmButtonText: "OK"
       });
-
-      alert("Header Updated Successfully (PUT)");
-
-    } catch (error) {
-      console.log("Put Error:", error);
-      alert("Failed to update header");
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("SUBMIT CLICKED");
-    console.log("Current Form Data:", formData);    // Default action -> PATCH (recommended)
-    handlePut();
+    handlePatch();
   };
 
   return (
@@ -196,22 +185,11 @@ export default function HeaderSection() {
 
         <div className="flex gap-4">
 
-        <button
-  type="submit"
-  onClick={() => console.log("BUTTON CLICK WORKING")}
-  className="editor-btn"
->
-  Save (PATCH)
-</button>
-
-
-
           <button
-            type="button"
-            onClick={handlePut}
+            type="submit"
             className="editor-btn"
           >
-            Full Update (PUT)
+            Save Header Info
           </button>
 
         </div>

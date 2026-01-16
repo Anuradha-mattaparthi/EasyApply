@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { logout } from "../services/api";
+import { logout } from "./services/api";
 
 export default function Dashboard() {
   return (

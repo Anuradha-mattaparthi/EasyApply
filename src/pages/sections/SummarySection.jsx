@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Accordion from "../components/Accordion";
-import axios from "axios";
+import API from "../services/api";
+import Swal from "sweetalert2";
 
 export default function SummarySection() {
 
@@ -10,35 +11,35 @@ export default function SummarySection() {
 
   const [loading, setLoading] = useState(false);
 
-  const token = localStorage.getItem("access");
-
-  const API_URL = "https://smartapply-7msy.onrender.com/api/me/resume/summary/";
+  const API_URL = "/api/me/resume/summary/";
 
   // ----------- GET SUMMARY -----------
   const fetchSummary = async () => {
     try {
       setLoading(true);
 
-      const res = await axios.get(API_URL, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      const res = await API.get(API_URL);
 
       setSummary(res.data);
 
     } catch (error) {
       console.log("Error fetching summary:", error);
+
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to load summary",
+        icon: "error",
+        confirmButtonText: "OK"
+      });
+
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (token) {
-      fetchSummary();
-    }
-  }, [token]);
+    fetchSummary();
+  }, []);
 
   // ----------- HANDLE CHANGE -----------
   const handleChange = (e) => {
@@ -50,52 +51,32 @@ export default function SummarySection() {
 
   // ----------- PATCH UPDATE -----------
   const handlePatch = async () => {
-
-    console.log("PATCH DATA:", summary);
-
     try {
-      await axios.patch(API_URL, summary, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+      await API.patch(API_URL, summary);
+
+      Swal.fire({
+        title: "Success!",
+        text: "Summary Updated Successfully",
+        icon: "success",
+        confirmButtonText: "OK"
       });
 
-      alert("Summary Updated Successfully (PATCH)");
-
     } catch (error) {
-      console.log("Patch Error:", error.response);
-      alert("Failed to update summary");
-    }
-  };
+      console.log("Patch Error:", error);
 
-  // ----------- PUT UPDATE -----------
-  const handlePut = async () => {
-
-    console.log("PUT DATA:", summary);
-
-    try {
-      await axios.put(API_URL, summary, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to update summary",
+        icon: "error",
+        confirmButtonText: "OK"
       });
-
-      alert("Summary Updated Successfully (PUT)");
-
-    } catch (error) {
-      console.log("Put Error:", error.response);
-      alert("Failed to update summary");
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handlePatch();   // default to PATCH
+    handlePatch();
   };
-
-  if (!token) {
-    return <p>Please login to edit summary</p>;
-  }
 
   return (
     <Accordion title="Professional Summary">
@@ -118,15 +99,7 @@ export default function SummarySection() {
         <div className="flex gap-4">
 
           <button type="submit" className="editor-btn">
-            Save (PATCH)
-          </button>
-
-          <button
-            type="button"
-            onClick={handlePut}
-            className="editor-btn"
-          >
-            Full Update (PUT)
+            Save Summary
           </button>
 
         </div>

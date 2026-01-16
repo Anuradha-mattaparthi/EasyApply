@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Accordion from "../components/Accordion";
-import axios from "axios";
+import API from "../services/api";
+import Swal from "sweetalert2";
 
 export default function ExperienceSection() {
 
@@ -19,35 +20,44 @@ export default function ExperienceSection() {
 
   const [loading, setLoading] = useState(false);
 
-  const token = localStorage.getItem("access");
-
-  const API_URL = "https://smartapply-7msy.onrender.com/api/me/resume/work-experience/";
+  const API_URL = "/api/me/resume/work-experience/";
 
   // -------- GET EXPERIENCES --------
   const fetchExperiences = async () => {
     try {
       setLoading(true);
 
-      const res = await axios.get(API_URL, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      const res = await API.get(API_URL);
 
       setExperiences(res.data);
 
     } catch (error) {
       console.log("Error fetching experiences:", error);
+
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to load experiences",
+        icon: "error",
+        confirmButtonText: "OK"
+      });
+
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (token) {
-      fetchExperiences();
+    fetchExperiences();
+  }, []);
+
+  // -------- AUTO SELECT RADIO BASED ON DATA --------
+  useEffect(() => {
+    if (experiences.length > 0) {
+      setExperienced(true);
+    } else {
+      setExperienced(false);
     }
-  }, [token]);
+  }, [experiences]);
 
   // -------- HANDLE CHANGE --------
   const handleChange = (e) => {
@@ -61,16 +71,15 @@ export default function ExperienceSection() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Posting experience:", newExp);
-
     try {
-      await axios.post(API_URL, newExp, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      await API.post(API_URL, newExp);
 
-      alert("Experience Added Successfully");
+      Swal.fire({
+        title: "Success!",
+        text: "Experience Added Successfully",
+        icon: "success",
+        confirmButtonText: "OK"
+      });
 
       setNewExp({
         job_title: "",
@@ -84,33 +93,42 @@ export default function ExperienceSection() {
       fetchExperiences();
 
     } catch (error) {
-      console.log("Add Experience Error:", error.response);
-      alert("Failed to add experience");
+      console.log("Add Experience Error:", error);
+
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to add experience",
+        icon: "error",
+        confirmButtonText: "OK"
+      });
     }
   };
 
   // -------- DELETE EXPERIENCE --------
   const deleteExperience = async (id) => {
     try {
-      await axios.delete(`${API_URL}${id}/`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      await API.delete(`${API_URL}${id}/`);
 
-      alert("Experience Deleted");
+      Swal.fire({
+        title: "Deleted!",
+        text: "Experience removed successfully",
+        icon: "success",
+        confirmButtonText: "OK"
+      });
 
       fetchExperiences();
 
     } catch (error) {
-      console.log("Delete Error:", error.response);
-      alert("Failed to delete experience");
+      console.log("Delete Error:", error);
+
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to delete experience",
+        icon: "error",
+        confirmButtonText: "OK"
+      });
     }
   };
-
-  /*if (!token) {
-    return <p>Please login to manage experience</p>;
-  }*/  
 
   return (
     <Accordion title="Work Experience">
@@ -121,11 +139,13 @@ export default function ExperienceSection() {
 
       <div className="space-y-6">
 
+        {/* EXPERIENCE TYPE RADIO */}
         <div className="flex gap-6 text-white">
           <label>
             <input
               type="radio"
               name="exp"
+              checked={experienced === true}
               onChange={() => setExperienced(true)}
             /> Experienced
           </label>
@@ -134,6 +154,7 @@ export default function ExperienceSection() {
             <input
               type="radio"
               name="exp"
+              checked={experienced === false}
               onChange={() => setExperienced(false)}
             /> Fresher
           </label>
