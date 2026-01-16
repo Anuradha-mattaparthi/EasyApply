@@ -196,9 +196,6 @@ export default function HeaderSection() {
 
         <div className="flex gap-4">
 
-          <button type="submit" className="editor-btn">
-            Save (PATCH)
-          </button>
 
           <button
             type="button"
