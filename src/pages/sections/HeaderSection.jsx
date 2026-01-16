@@ -196,9 +196,14 @@ export default function HeaderSection() {
 
         <div className="flex gap-4">
 
-          <button type="submit" className="editor-btn fgdf">
-            Save (PATCH)
-          </button>
+        <button
+  type="submit"
+  className="editor-btn"
+  onClick={(e) => e.stopPropagation()}
+>
+  Save (PATCH)
+</button>
+
 
           <button
             type="button"
