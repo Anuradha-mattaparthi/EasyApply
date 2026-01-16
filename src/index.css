@@ -8,3 +8,27 @@
     focus:outline-none focus:border-[#2563EB];
   }
 }
+.editor-input {
+  background: #0a0a0a;
+  border: 1px solid #222;
+  padding: 10px;
+  border-radius: 8px;
+  width: 100%;
+  color: white;
+}
+
+.editor-textarea {
+  background: #0a0a0a;
+  border: 1px solid #222;
+  padding: 10px;
+  border-radius: 8px;
+  width: 100%;
+  color: white;
+}
+
+.editor-btn {
+  background: #2563EB;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+}
