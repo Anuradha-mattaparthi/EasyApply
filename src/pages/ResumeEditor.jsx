@@ -6,9 +6,9 @@ import ExperienceSection from "./sections/ExperienceSection";
 
 export default function ResumeEditor() {
   return (
-    <div className="min-h-screen bg-black p-6">
+    <div className="min-h-screen bg-[#F2F2F2] p-6">
 
-      <h1 className="text-2xl font-bold mb-6 text-center text-white">
+      <h1 className="text-2xl font-bold mb-6 text-center text-black">
         Resume Editor
       </h1>
 
