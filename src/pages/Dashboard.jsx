@@ -23,8 +23,10 @@ export default function Dashboard() {
             to="/profile"
             className="text-sm text-[#2563EB] hover:underline"
           >
-            Basic Details →
+            Resume Editor →
           </Link>
+          <Link to="/preview">Preview Resume</Link>
+
         <button
         onClick={logout}
         className="text-sm text-red-600 hover:underline"

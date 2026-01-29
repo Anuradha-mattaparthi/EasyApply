@@ -5,6 +5,8 @@ import Signin from "./pages/Signin";
 import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./routes/PrivateRoute";
 import ResumeEditor from "./pages/ResumeEditor";
+import ResumePreview from "./pages/ResumePreview";
+
 
 function App() {
   return (
@@ -21,8 +23,8 @@ function App() {
           </PrivateRoute>
         }
       />
-
-      <Route path="/profile" element={ <ResumeEditor/> } />
+      <Route path="/preview" element={<ResumePreview />} />
+      <Route path="/profile" element={ <PrivateRoute> <ResumeEditor/> </PrivateRoute>} />
     </Routes>
   );
 }

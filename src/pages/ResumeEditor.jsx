@@ -3,6 +3,10 @@ import HeaderSection from "./sections/HeaderSection";
 import SummarySection from "./sections/SummarySection";
 import SkillsSection from "./sections/SkillsSection";
 import ExperienceSection from "./sections/ExperienceSection";
+import ProjectSection from "./sections/ProjectSection";
+import EducationSection from "./sections/EducationSection";
+import CertificationSection from "./sections/CertificationSection";
+import AchievementsSection from "./sections/AchievementsSection";
 
 export default function ResumeEditor() {
   return (
@@ -21,6 +25,10 @@ export default function ResumeEditor() {
         <SkillsSection />
 
         <ExperienceSection />
+        <ProjectSection />
+        <EducationSection />
+        <CertificationSection />
+        <AchievementsSection />
 
       </div>
     </div>
