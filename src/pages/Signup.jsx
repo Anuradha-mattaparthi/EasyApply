@@ -1,9 +1,10 @@
 import React, { useState }  from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 
 
 export default function Signup() {
+  const navigate = useNavigate();
 
   if (localStorage.getItem("access")) {
     return <Navigate to="/dashboard" />;
@@ -38,10 +39,20 @@ export default function Signup() {
       const data = await res.json();
 
       if (res.ok) {
-        alert("Signup successful!");
-        console.log(data);
+        Swal.fire({
+          title: "Success!",
+          text: "Signup Successfully",
+          icon: "success",
+          confirmButtonText: "OK"
+        });
+        navigate("/signin"); 
       } else {
-        alert(data.message || "Signup failed");
+        Swal.fire({
+          title: "Error!",
+          text: res.msg,
+          icon: "error",
+          confirmButtonText: "OK"
+        });
       }
 
     } catch (err) {
