@@ -5,6 +5,8 @@ import Swal from "sweetalert2";
 
 export default function EducationSection() {
 
+  const [editingEduId, setEditingEduId] = useState(null);
+
   const [educations, setEducations] = useState([]);
 
   const [newEdu, setNewEdu] = useState({
@@ -54,21 +56,43 @@ export default function EducationSection() {
       [e.target.name]: e.target.value
     });
   };
-
+  const editEducation = (edu) => {
+    setNewEdu({
+      degree: edu.degree,
+      institution: edu.institution,
+      graduation_year: edu.graduation_year,
+      cgpa: edu.cgpa || "",
+      ordering_index: edu.ordering_index || 0
+    });
+  
+    setEditingEduId(edu.id);
+  };
+  
   // ----------- ADD EDUCATION (POST) -----------
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
-      await API.post(API_URL, newEdu);
-
-      Swal.fire({
-        title: "Success!",
-        text: "Education Added Successfully",
-        icon: "success",
-        confirmButtonText: "OK"
-      });
-
+      if (editingEduId) {
+        // PATCH (UPDATE)
+        await API.patch(`${API_URL}${editingEduId}/`, newEdu);
+  
+        Swal.fire({
+          title: "Updated!",
+          text: "Education updated successfully",
+          icon: "success"
+        });
+      } else {
+        // POST (CREATE)
+        await API.post(API_URL, newEdu);
+  
+        Swal.fire({
+          title: "Success!",
+          text: "Education added successfully",
+          icon: "success"
+        });
+      }
+  
       setNewEdu({
         degree: "",
         institution: "",
@@ -76,20 +100,21 @@ export default function EducationSection() {
         cgpa: "",
         ordering_index: 0
       });
-
+  
+      setEditingEduId(null);
       fetchEducations();
-
+  
     } catch (error) {
-      console.log("Error adding education:", error);
-
+      console.log("Save Education Error:", error);
+  
       Swal.fire({
         title: "Error!",
-        text: "Failed to add education",
-        icon: "error",
-        confirmButtonText: "OK"
+        text: "Failed to save education",
+        icon: "error"
       });
     }
   };
+  
 
   // ----------- DELETE EDUCATION -----------
   const deleteEducation = async (id) => {
@@ -166,8 +191,9 @@ export default function EducationSection() {
           />
 
           <button className="editor-btn">
-            Add Education
+            {editingEduId ? "Update Education" : "Add Education"}
           </button>
+
 
         </form>
 
@@ -193,12 +219,22 @@ export default function EducationSection() {
                     </p>
                   </div>
 
-                  <button
-                    onClick={() => deleteEducation(edu.id)}
-                    className="bg-red-600 text-white px-3 py-1 rounded"
-                  >
-                    Delete
-                  </button>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => editEducation(edu)}
+                      className="bg-blue-600 text-white px-3 py-1 rounded"
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      onClick={() => deleteEducation(edu.id)}
+                      className="bg-red-600 text-white px-3 py-1 rounded"
+                    >
+                      Delete
+                    </button>
+                  </div>
+
                 </li>
               ))}
 

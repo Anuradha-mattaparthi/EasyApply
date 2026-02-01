@@ -4,6 +4,7 @@ import API from "../services/api";
 import Swal from "sweetalert2";
 
 export default function CertificationSection() {
+  const [editingCertId, setEditingCertId] = useState(null);
 
   const [certifications, setCertifications] = useState([]);
 
@@ -54,21 +55,43 @@ export default function CertificationSection() {
       [e.target.name]: e.target.value
     });
   };
-
+  const editCertification = (cert) => {
+    setNewCert({
+      name: cert.name,
+      organization: cert.organization || "",
+      credential_url: cert.credential_url || "",
+      issue_year: cert.issue_year || "",
+      ordering_index: cert.ordering_index || 0
+    });
+  
+    setEditingCertId(cert.id);
+  };
+  
   // ----------- ADD CERTIFICATION (POST) -----------
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
-      await API.post(API_URL, newCert);
-
-      Swal.fire({
-        title: "Success!",
-        text: "Certification Added Successfully",
-        icon: "success",
-        confirmButtonText: "OK"
-      });
-
+      if (editingCertId) {
+        // PATCH (UPDATE)
+        await API.patch(`${API_URL}${editingCertId}/`, newCert);
+  
+        Swal.fire({
+          title: "Updated!",
+          text: "Certification updated successfully",
+          icon: "success"
+        });
+      } else {
+        // POST (CREATE)
+        await API.post(API_URL, newCert);
+  
+        Swal.fire({
+          title: "Success!",
+          text: "Certification added successfully",
+          icon: "success"
+        });
+      }
+  
       setNewCert({
         name: "",
         organization: "",
@@ -76,20 +99,21 @@ export default function CertificationSection() {
         issue_year: "",
         ordering_index: 0
       });
-
+  
+      setEditingCertId(null);
       fetchCertifications();
-
+  
     } catch (error) {
-      console.log("Error adding certification:", error);
-
+      console.log("Save Certification Error:", error);
+  
       Swal.fire({
         title: "Error!",
-        text: "Failed to add certification",
-        icon: "error",
-        confirmButtonText: "OK"
+        text: "Failed to save certification",
+        icon: "error"
       });
     }
   };
+  
 
   // ----------- DELETE CERTIFICATION -----------
   const deleteCertification = async (id) => {
@@ -164,8 +188,9 @@ export default function CertificationSection() {
           />
 
           <button className="editor-btn">
-            Add Certification
+            {editingCertId ? "Update Certification" : "Add Certification"}
           </button>
+
 
         </form>
 
@@ -206,12 +231,22 @@ export default function CertificationSection() {
                     )}
                   </div>
 
-                  <button
-                    onClick={() => deleteCertification(cert.id)}
-                    className="bg-red-600 text-white px-3 py-1 rounded"
-                  >
-                    Delete
-                  </button>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => editCertification(cert)}
+                      className="bg-blue-600 text-white px-3 py-1 rounded"
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      onClick={() => deleteCertification(cert.id)}
+                      className="bg-red-600 text-white px-3 py-1 rounded"
+                    >
+                      Delete
+                    </button>
+                  </div>
+
                 </li>
               ))}
 

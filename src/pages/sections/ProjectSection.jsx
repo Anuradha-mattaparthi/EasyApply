@@ -6,6 +6,8 @@ import Swal from "sweetalert2";
 export default function ProjectSection() {
 
   const [projects, setProjects] = useState([]);
+  const [editingProjectId, setEditingProjectId] = useState(null);
+
 
   const [newProject, setNewProject] = useState({
     title: "",
@@ -41,6 +43,7 @@ export default function ProjectSection() {
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     fetchProjects();
@@ -53,52 +56,74 @@ export default function ProjectSection() {
       [e.target.name]: e.target.value
     });
   };
-
+  const editProject = (project) => {
+    setNewProject({
+      title: project.title,
+      tech_stack: project.tech_stack?.join(", ") || "",
+      bullets: project.bullets?.join("\n") || "",
+      ordering_index: project.ordering_index || 0
+    });
+  
+    setEditingProjectId(project.id);
+  };
+  
   // ----------- POST (CREATE PROJECT) -----------
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
+    const payload = {
+      title: newProject.title,
+      tech_stack: newProject.tech_stack
+        ? newProject.tech_stack.split(",").map(t => t.trim())
+        : [],
+      bullets: newProject.bullets
+        ? newProject.bullets.split("\n").filter(Boolean)
+        : [],
+      ordering_index: 0
+    };
+  
     try {
-      const payload = {
-        title: newProject.title,
-        tech_stack: newProject.tech_stack
-          ? newProject.tech_stack.split(",")
-          : [],
-        bullets: newProject.bullets
-          ? newProject.bullets.split("\n")
-          : [],
-        ordering_index: 0
-      };
-
-      await API.post(API_URL, payload);
-
-      Swal.fire({
-        title: "Success!",
-        text: "Project Added Successfully",
-        icon: "success",
-        confirmButtonText: "OK"
-      });
-
+      if (editingProjectId) {
+        // PATCH (UPDATE)
+        await API.patch(`${API_URL}${editingProjectId}/`, payload);
+  
+        Swal.fire({
+          title: "Updated!",
+          text: "Project updated successfully",
+          icon: "success"
+        });
+      } else {
+        // POST (CREATE)
+        await API.post(API_URL, payload);
+  
+        Swal.fire({
+          title: "Success!",
+          text: "Project added successfully",
+          icon: "success"
+        });
+      }
+  
       setNewProject({
         title: "",
         tech_stack: "",
         bullets: "",
         ordering_index: 0
       });
-
+  
+      setEditingProjectId(null);
       fetchProjects();
-
+  
     } catch (error) {
-      console.log("Error creating project:", error);
-
+      console.log("Save Project Error:", error);
+  
       Swal.fire({
         title: "Error!",
-        text: "Failed to add project",
-        icon: "error",
-        confirmButtonText: "OK"
+        text: "Failed to save project",
+        icon: "error"
       });
     }
   };
+  
 
   // ----------- DELETE PROJECT -----------
   const deleteProject = async (id) => {
@@ -164,8 +189,9 @@ export default function ProjectSection() {
           />
 
           <button className="editor-btn">
-            Add Project
+            {editingProjectId ? "Update Project" : "Add Project"}
           </button>
+
 
         </form>
 
@@ -186,12 +212,22 @@ export default function ProjectSection() {
                   <div className="flex justify-between items-center mb-2">
                     <h4 className="font-bold">{project.title}</h4>
 
-                    <button
-                      onClick={() => deleteProject(project.id)}
-                      className="bg-red-600 text-white px-3 py-1 rounded"
-                    >
-                      Delete
-                    </button>
+                    <div className="flex gap-2">
+                        <button
+                          onClick={() => editProject(project)}
+                          className="bg-blue-600 text-white px-3 py-1 rounded"
+                        >
+                          Edit
+                        </button>
+
+                        <button
+                          onClick={() => deleteProject(project.id)}
+                          className="bg-red-600 text-white px-3 py-1 rounded"
+                        >
+                          Delete
+                        </button>
+                    </div>
+
                   </div>
 
                   {project.tech_stack?.length > 0 && (

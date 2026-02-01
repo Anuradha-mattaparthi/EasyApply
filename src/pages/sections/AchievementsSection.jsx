@@ -4,6 +4,8 @@ import API from "../services/api";
 import Swal from "sweetalert2";
 
 export default function AchievementsSection() {
+  const [editingAchievementId, setEditingAchievementId] = useState(null);
+
 
   const [achievements, setAchievements] = useState([]);
 
@@ -19,6 +21,19 @@ export default function AchievementsSection() {
 
   const API_URL = "/api/me/resume/achievements/";
 
+  
+
+  const editAchievement = (ach) => {
+    setNewAchievement({
+      title: ach.title,
+      description: ach.description || "",
+      year: ach.year || "",
+      type: ach.type || "other",
+      ordering_index: ach.ordering_index || 0
+    });
+  
+    setEditingAchievementId(ach.id);
+  };
   // ----------- GET ACHIEVEMENTS -----------
   const fetchAchievements = async () => {
     try {
@@ -58,17 +73,32 @@ export default function AchievementsSection() {
   // ----------- ADD ACHIEVEMENT (POST) -----------
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
-      await API.post(API_URL, newAchievement);
-
-      Swal.fire({
-        title: "Success!",
-        text: "Achievement Added Successfully",
-        icon: "success",
-        confirmButtonText: "OK"
-      });
-
+      if (editingAchievementId) {
+        // ✅ UPDATE (PATCH)
+        await API.patch(
+          `${API_URL}${editingAchievementId}/`,
+          newAchievement
+        );
+  
+        Swal.fire({
+          title: "Updated!",
+          text: "Achievement updated successfully",
+          icon: "success"
+        });
+      } else {
+        // ✅ CREATE (POST)
+        await API.post(API_URL, newAchievement);
+  
+        Swal.fire({
+          title: "Success!",
+          text: "Achievement added successfully",
+          icon: "success"
+        });
+      }
+  
+      // reset form
       setNewAchievement({
         title: "",
         description: "",
@@ -76,20 +106,21 @@ export default function AchievementsSection() {
         type: "other",
         ordering_index: 0
       });
-
+  
+      setEditingAchievementId(null);
       fetchAchievements();
-
+  
     } catch (error) {
-      console.log("Error adding achievement:", error);
-
+      console.log("Save Achievement Error:", error);
+  
       Swal.fire({
         title: "Error!",
-        text: "Failed to add achievement",
-        icon: "error",
-        confirmButtonText: "OK"
+        text: "Failed to save achievement",
+        icon: "error"
       });
     }
   };
+  
 
   // ----------- DELETE ACHIEVEMENT -----------
   const deleteAchievement = async (id) => {
@@ -155,21 +186,12 @@ export default function AchievementsSection() {
             className="editor-input"
           />
 
-          <select
-            name="type"
-            value={newAchievement.type}
-            onChange={handleChange}
-            className="editor-input"
-          >
-            <option value="award">Award</option>
-            <option value="recognition">Recognition</option>
-            <option value="certificate">Certificate</option>
-            <option value="other">Other</option>
-          </select>
+         
 
           <button className="editor-btn">
-            Add Achievement
+            {editingAchievementId ? "Update Achievement" : "Add Achievement"}
           </button>
+
 
         </form>
 
@@ -205,12 +227,22 @@ export default function AchievementsSection() {
                     )}
                   </div>
 
-                  <button
-                    onClick={() => deleteAchievement(ach.id)}
-                    className="bg-red-600 text-white px-3 py-1 rounded"
-                  >
-                    Delete
-                  </button>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => editAchievement(ach)}
+                      className="bg-blue-600 text-white px-3 py-1 rounded"
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      onClick={() => deleteAchievement(ach.id)}
+                      className="bg-red-600 text-white px-3 py-1 rounded"
+                    >
+                      Delete
+                    </button>
+                  </div>
+
                 </li>
               ))}
 

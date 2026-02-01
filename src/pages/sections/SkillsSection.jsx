@@ -12,6 +12,8 @@ export default function SkillsSection() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [editingSkillId, setEditingSkillId] = useState(null);
+
 
   const API_URL = "/api/me/resume/skills/";
 
@@ -54,33 +56,49 @@ export default function SkillsSection() {
   // ----------- POST (CREATE SKILL) -----------
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
-      await API.post(API_URL, newSkill);
-
-      Swal.fire({
-        title: "Success!",
-        text: "Skill Added Successfully",
-        icon: "success",
-        confirmButtonText: "OK"
-      });
-
+      if (editingSkillId) {
+        // UPDATE
+        await API.patch(`${API_URL}${editingSkillId}/`, newSkill);
+  
+        Swal.fire({
+          title: "Updated!",
+          text: "Skill updated successfully",
+          icon: "success"
+        });
+      } else {
+        // CREATE
+        await API.post(API_URL, newSkill);
+  
+        Swal.fire({
+          title: "Success!",
+          text: "Skill added successfully",
+          icon: "success"
+        });
+      }
+  
       setNewSkill({ name: "", category: "" });
-
+      setEditingSkillId(null);
       fetchSkills();
-
+  
     } catch (error) {
-      console.log("Error creating skill:", error);
-
       Swal.fire({
         title: "Error!",
-        text: "Failed to add skill",
-        icon: "error",
-        confirmButtonText: "OK"
+        text: "Failed to save skill",
+        icon: "error"
       });
     }
   };
-
+  
+  const editSkill = (skill) => {
+    setNewSkill({
+      name: skill.name,
+      category: skill.category
+    });
+    setEditingSkillId(skill.id);
+  };
+  
   // ----------- DELETE SKILL -----------
   const deleteSkill = async (id) => {
     try {
@@ -136,8 +154,9 @@ export default function SkillsSection() {
           />
 
           <button className="editor-btn">
-            Add Skill
+            {editingSkillId ? "Update Skill" : "Add Skill"}
           </button>
+
 
         </form>
 
@@ -159,15 +178,28 @@ export default function SkillsSection() {
                     {skill.name} - {skill.category}
                   </span>
 
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      deleteSkill(skill.id);
-                    }}
-                    className="bg-red-600 text-white px-3 py-1 rounded"
-                  >
-                    Delete
-                  </button>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        editSkill(skill);
+                      }}
+                      className="bg-blue-600 text-white px-3 py-1 rounded"
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteSkill(skill.id);
+                      }}
+                      className="bg-red-600 text-white px-3 py-1 rounded"
+                    >
+                      Delete
+                    </button>
+                  </div>
+
 
                 </li>
               ))}

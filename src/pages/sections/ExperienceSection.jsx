@@ -8,6 +8,8 @@ export default function ExperienceSection() {
   const [experienced, setExperienced] = useState(false);
 
   const [experiences, setExperiences] = useState([]);
+  const [editingExpId, setEditingExpId] = useState(null);
+
 
   const [newExp, setNewExp] = useState({
     job_title: "",
@@ -45,7 +47,21 @@ export default function ExperienceSection() {
       setLoading(false);
     }
   };
-
+  
+  const editExperience = (exp) => {
+    setNewExp({
+      job_title: exp.job_title,
+      company_name: exp.company_name,
+      start_date: exp.start_date,
+      end_date: exp.end_date || "",
+      bullets: exp.bullets || [],
+      ordering_index: exp.ordering_index || 0
+    });
+  
+    setEditingExpId(exp.id);
+    setExperienced(true);
+  };
+  
   useEffect(() => {
     fetchExperiences();
   }, []);
@@ -70,17 +86,28 @@ export default function ExperienceSection() {
   // -------- ADD EXPERIENCE (POST) --------
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
-      await API.post(API_URL, newExp);
-
-      Swal.fire({
-        title: "Success!",
-        text: "Experience Added Successfully",
-        icon: "success",
-        confirmButtonText: "OK"
-      });
-
+      if (editingExpId) {
+        // PATCH (UPDATE)
+        await API.patch(`${API_URL}${editingExpId}/`, newExp);
+  
+        Swal.fire({
+          title: "Updated!",
+          text: "Experience updated successfully",
+          icon: "success"
+        });
+      } else {
+        // POST (CREATE)
+        await API.post(API_URL, newExp);
+  
+        Swal.fire({
+          title: "Success!",
+          text: "Experience added successfully",
+          icon: "success"
+        });
+      }
+  
       setNewExp({
         job_title: "",
         company_name: "",
@@ -89,20 +116,21 @@ export default function ExperienceSection() {
         bullets: [],
         ordering_index: 0
       });
-
+  
+      setEditingExpId(null);
       fetchExperiences();
-
+  
     } catch (error) {
-      console.log("Add Experience Error:", error);
-
+      console.log("Save Experience Error:", error);
+  
       Swal.fire({
         title: "Error!",
-        text: "Failed to add experience",
-        icon: "error",
-        confirmButtonText: "OK"
+        text: "Failed to save experience",
+        icon: "error"
       });
     }
   };
+  
 
   // -------- DELETE EXPERIENCE --------
   const deleteExperience = async (id) => {
@@ -201,8 +229,9 @@ export default function ExperienceSection() {
               />
 
               <button className="editor-btn">
-                Add Experience
+                {editingExpId ? "Update Experience" : "Add Experience"}
               </button>
+
 
             </form>
 
@@ -222,6 +251,16 @@ export default function ExperienceSection() {
                       {exp.start_date} - {exp.end_date || "Present"}
                     </p>
                   </div>
+                  <div className="flex gap-2">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      editExperience(exp);
+                    }}
+                    className="bg-blue-600 text-white px-3 py-1 rounded"
+                  >
+                    Edit
+                  </button>
 
                   <button
                     onClick={(e) => {
@@ -232,6 +271,8 @@ export default function ExperienceSection() {
                   >
                     Delete
                   </button>
+                </div>
+
                 </div>
               ))}
 
