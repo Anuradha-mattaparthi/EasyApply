@@ -20,17 +20,15 @@ export default function Home() {
         {/* CONTENT */}
         <div className="relative z-10 max-w-3xl px-6 text-center">
           <h1 className="text-6xl font-medium tracking-tight text-[#F1F1F1]">
-            Easy Apply
+          SMARTAPPLY
           </h1>
 
           <p className="mt-4 text-2xl text-[#CFCFCF]">
-            Your 24/7 job search agent
+          Your AI Job Agent That Works While You Sleep
           </p>
 
           <p className="mt-8 text-lg text-[#A8A8A8] leading-relaxed">
-            Easy Apply automatically finds jobs that match your skills, analyzes
-            job descriptions, ranks your profile, and shows exactly where to
-            apply — so you can focus on interviews, not searching.
+          SmartApply continuously searches the internet, finds jobs that match your profile, creates a tailored resume for each role, and prepares everything you need to apply — automatically.
           </p>
 
           <div className="mt-12 flex justify-center gap-5">
@@ -56,11 +54,10 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center max-w-2xl mx-auto mb-20">
             <h2 className="text-4xl font-medium text-[#1A1A1A]">
-              How Easy Apply Works
+            How SmartApply Works
             </h2>
             <p className="mt-4 text-lg text-[#2A2A2A]">
-              One profile. Continuous job discovery. Clear results.
-            </p>
+            One profile. Continuous job discovery. Apply-ready results.            </p>
           </div>
 
           <div className="grid md:grid-cols-5 items-center gap-14 justify-items-center">
@@ -69,8 +66,8 @@ export default function Home() {
                 Create Your Profile
               </h3>
               <p className="text-[#6A6A6A] leading-relaxed">
-                Add your skills, preferences, salary range, and location.
-              </p>
+              Add your skills, experience, job preferences, locations, and career goals.
+              This is a one-time setup — SmartApply uses it continuously.              </p>
             </div>
 
             <div className="hidden md:flex items-center justify-center text-[#2563EB] text-3xl">
@@ -79,11 +76,10 @@ export default function Home() {
 
             <div className="bg-white border border-[#E5E5E5] rounded-3xl p-10 shadow-lg w-[350px]">
               <h3 className="text-xl font-medium text-[#1A1A1A] mb-4">
-                AI Agent Searches
+              AI Agents Work 24/7
               </h3>
               <p className="text-[#6A6A6A] leading-relaxed">
-                Our AI continuously scans job platforms that match your profile.
-              </p>
+              SmartApply continuously scans the internet for relevant roles, analyzes job descriptions, and prepares job-specific application assets automatically.             </p>
             </div>
 
             <div className="hidden md:flex items-center justify-center text-[#2563EB] text-3xl">
@@ -92,10 +88,10 @@ export default function Home() {
 
             <div className="bg-white border border-[#E5E5E5] rounded-3xl p-10 shadow-lg w-[350px]">
               <h3 className="text-xl font-medium text-[#1A1A1A] mb-4">
-                Get Ranked Matches
+              Apply-Ready Matches
               </h3>
               <p className="text-[#6A6A6A] leading-relaxed">
-                Matches get delivered directly to your email.
+              Receive ranked job matches with tailored resumes, company insights, HR contacts, and ready-to-send follow-up emails — delivered to your dashboard and email.
               </p>
             </div>
           </div>
@@ -107,37 +103,40 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto mb-24">
             <h2 className="text-4xl font-medium text-[#1A1A1A]">
-              Job Searching, Simplified
+            Job Searching, Reimagined
             </h2>
             <p className="mt-4 text-lg text-[#5A5A5A]">
-              See how Easy Apply replaces the traditional job hunt.
-            </p>
+            See how SmartApply replaces the traditional job hunt.            </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-12">
             <div className="bg-white rounded-3xl p-10 shadow-lg">
               <h3 className="text-2xl font-medium text-[#1A1A1A] mb-6">
-                Manual & Time-Consuming
+              Other Traditional Manual Process <br/>
+               <small>Manual & Time-Consuming</small> 
               </h3>
               <ul className="space-y-4 text-[#6A6A6A]">
-                <li>• Apply on multiple job boards</li>
-                <li>• No clarity on skill match</li>
-                <li>• Endless scrolling & filtering</li>
-                <li>• Resume sent blindly</li>
-                <li>• Missed opportunities</li>
+                <li>• Search across multiple job platforms</li>
+                <li>• Unclear skill-to-job fit</li>
+                <li>• Endless scrolling and filtering</li>
+                <li>• Generic resume sent everywhere</li>
+                <li>• No company or HR insights</li>
+                <li>• Missed opportunities due to time limits</li>
               </ul>
             </div>
 
             <div className="bg-[#0B0B0B] rounded-3xl p-10 shadow-xl">
               <h3 className="text-2xl font-medium text-white mb-6">
-                Automated & Intelligent
+                SmartApply Process <br/>
+                <small>Automated & Intelligent</small>
               </h3>
               <ul className="space-y-4 text-[#B5B5B5]">
                 <li>• One profile setup</li>
                 <li>• AI searches jobs 24/7</li>
-                <li>• Clear skill-match ranking</li>
-                <li>• Resume aligned to JD</li>
-                <li>• Jobs delivered to your email</li>
+                <li>• Clear job–skill match ranking</li>
+                <li>• Job-specific, tailored resume for each role</li>
+                <li>• Company background & HR insights included</li>
+                <li>• Apply-ready jobs delivered to your dashboard & email</li>
               </ul>
             </div>
           </div>
