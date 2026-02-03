@@ -61,7 +61,7 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-5 items-center gap-14 justify-items-center">
-            <div className="bg-white border border-[#E5E5E5] rounded-3xl p-10 shadow-lg w-[350px]">
+          <div className="bg-white border border-[#E5E5E5] rounded-3xl p-10 shadow-lg w-full max-w-[350px]">
               <h3 className="text-xl font-medium text-[#1A1A1A] mb-4">
                 Create Your Profile
               </h3>
@@ -74,7 +74,7 @@ export default function Home() {
               →
             </div>
 
-            <div className="bg-white border border-[#E5E5E5] rounded-3xl p-10 shadow-lg w-[350px]">
+            <div className="bg-white border border-[#E5E5E5] rounded-3xl p-10 shadow-lg w-full max-w-[350px]">
               <h3 className="text-xl font-medium text-[#1A1A1A] mb-4">
               AI Agents Work 24/7
               </h3>
@@ -85,8 +85,7 @@ export default function Home() {
             <div className="hidden md:flex items-center justify-center text-[#2563EB] text-3xl">
               →
             </div>
-
-            <div className="bg-white border border-[#E5E5E5] rounded-3xl p-10 shadow-lg w-[350px]">
+            <div className="bg-white border border-[#E5E5E5] rounded-3xl p-10 shadow-lg w-full max-w-[350px]">
               <h3 className="text-xl font-medium text-[#1A1A1A] mb-4">
               Apply-Ready Matches
               </h3>
