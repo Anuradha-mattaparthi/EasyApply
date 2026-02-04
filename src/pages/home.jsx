@@ -33,18 +33,18 @@ export default function Home() {
 
           <div className="mt-12 flex justify-center gap-5">
           <Link
-    to="/signup"
-    className="bg-[#2563EB] text-white px-9 py-3 rounded-xl font-medium hover:bg-[#1D4ED8] transition"
-  >
-    Signup
-  </Link>
+              to="/signup"
+              className="bg-[#2563EB] text-white px-9 py-3 rounded-xl font-medium hover:bg-[#1D4ED8] transition"
+            >
+              Signup
+            </Link>
 
-  <Link
-    to="/signin"
-    className="px-9 py-3 rounded-xl border border-[#3A3A3A] text-[#E0E0E0] hover:bg-[#1F1F1F] transition"
-  >
-    Signin
-  </Link>
+            <Link
+              to="/signin"
+              className="px-9 py-3 rounded-xl border border-[#3A3A3A] text-[#E0E0E0] hover:bg-[#1F1F1F] transition"
+            >
+              Signin
+            </Link>
           </div>
         </div>
       </section>
@@ -57,40 +57,46 @@ export default function Home() {
             How SmartApply Works
             </h2>
             <p className="mt-4 text-lg text-[#2A2A2A]">
-            One profile. Continuous job discovery. Apply-ready results.            </p>
+            One profile. Continuous job discovery. Apply-ready results.           
+             </p>
           </div>
 
-          <div className="grid md:grid-cols-5 items-center gap-14 justify-items-center">
-          <div className="bg-white border border-[#E5E5E5] rounded-3xl p-10 shadow-lg w-full max-w-[350px]">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr_auto_1fr] 
+                gap-14 items-center justify-items-center">
+
+          <div className="bg-white border border-[#E5E5E5] rounded-3xl p-8 md:p-10 shadow-lg w-full max-w-[350px]">
               <h3 className="text-xl font-medium text-[#1A1A1A] mb-4">
                 Create Your Profile
               </h3>
-              <p className="text-[#6A6A6A] leading-relaxed">
+              <p className="text-[#6A6A6A] leading-relaxed font-sans">
               Add your skills, experience, job preferences, locations, and career goals.
               This is a one-time setup — SmartApply uses it continuously.              </p>
             </div>
 
-            <div className="hidden md:flex items-center justify-center text-[#2563EB] text-3xl">
-              →
+            <div className="hidden lg:flex items-start pt-6 text-[#2563EB] text-3xl">
+                →
             </div>
 
-            <div className="bg-white border border-[#E5E5E5] rounded-3xl p-10 shadow-lg w-full max-w-[350px]">
+
+            <div className="bg-white border border-[#E5E5E5] rounded-3xl p-8 md:p-10 shadow-lg w-full max-w-[350px]">
               <h3 className="text-xl font-medium text-[#1A1A1A] mb-4">
               AI Agents Work 24/7
               </h3>
-              <p className="text-[#6A6A6A] leading-relaxed">
+              <p className="text-[#6A6A6A] leading-relaxed font-sans">
+
               SmartApply continuously scans the internet for relevant roles, analyzes job descriptions, and prepares job-specific application assets automatically.             </p>
             </div>
 
-            <div className="hidden md:flex items-center justify-center text-[#2563EB] text-3xl">
+            <div className="hidden lg:flex items-start pt-6 text-[#2563EB] text-3xl">
               →
             </div>
-            <div className="bg-white border border-[#E5E5E5] rounded-3xl p-10 shadow-lg w-full max-w-[350px]">
+             
+            <div className="bg-white border border-[#E5E5E5] rounded-3xl p-8 md:p-10 shadow-lg w-full max-w-[350px]">
               <h3 className="text-xl font-medium text-[#1A1A1A] mb-4">
               Apply-Ready Matches
               </h3>
-              <p className="text-[#6A6A6A] leading-relaxed">
-              Receive ranked job matches with tailored resumes, company insights, HR contacts, and ready-to-send follow-up emails — delivered to your dashboard and email.
+              <p className="text-[#6A6A6A] leading-relaxed font-sans">
+              Receive ranked job matches with tailored resumes, company insights, HR contacts, and ready-to-send follow-up emails delivered to your dashboard and email.
               </p>
             </div>
           </div>
@@ -105,7 +111,8 @@ export default function Home() {
             Job Searching, Reimagined
             </h2>
             <p className="mt-4 text-lg text-[#5A5A5A]">
-            See how SmartApply replaces the traditional job hunt.            </p>
+            See how SmartApply replaces the traditional job hunt.            
+            </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-12">
