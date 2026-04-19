@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, Link,useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function Signin() {
 
   if (localStorage.getItem("access")) {
     return <Navigate to="/dashboard" />;
   }
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -24,12 +26,12 @@ export default function Signin() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error("Invalid credentials");
-
+      if (!res.ok) {
+        throw new Error(data.error || "Invalid credentials");
+      }
       localStorage.setItem("access", data.access);
       localStorage.setItem("refresh", data.refresh);
-      window.location.href = "/dashboard";
-
+      navigate("/dashboard");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -37,6 +39,48 @@ export default function Signin() {
     }
   };
 
+
+  const handleForgotPassword = async () => {
+    const { value: emailInput } = await Swal.fire({
+      title: "Enter your email",
+      input: "email",
+      inputValue: email, 
+      inputPlaceholder: "Enter your email address",
+      confirmButtonText: "Send OTP",
+      inputValidator: (value) => {
+        if (!value) return "Email is required";
+      }
+    });
+  
+    if (!emailInput) return;
+  
+    try {
+      const res = await fetch("https://smartapply-7msy.onrender.com/api/auth/forgot-password/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email: emailInput })
+      });
+  
+      const data = await res.json();
+  
+      localStorage.removeItem("reset_email");
+      localStorage.setItem("reset_email", emailInput);
+
+      Swal.fire({
+        title: "Check your email",
+        text: data.message,
+        icon: "info",
+        confirmButtonText: "OK"
+      }).then(() => {
+        navigate("/verify-otp");
+      });
+    } catch (err) {
+      console.error(err);
+      Swal.fire("Error", "Server error", "error");
+    }
+  };
   return (
     <div className="min-h-screen grid md:grid-cols-10 font-mono">
       <div className="md:col-span-3 bg-black text-white flex items-center justify-center">
@@ -49,12 +93,33 @@ export default function Signin() {
 
           {error && <p className="text-red-600">{error}</p>}
 
-          <input type="email" placeholder="Email" onChange={e=>setEmail(e.target.value)} required className="w-full p-3"/>
-          <input type="password" placeholder="Password" onChange={e=>setPassword(e.target.value)} required className="w-full p-3"/>
+          <input type="email" name="email" placeholder="Email" onChange={e=>setEmail(e.target.value)} required className="w-full p-3"/>
+          <input type="password" name="password" placeholder="Password" onChange={e=>setPassword(e.target.value)} required className="w-full p-3"/>
 
-          <button className="bg-blue-600 text-white p-3 w-full">
+          <button
+            disabled={loading}
+            className="bg-blue-600 text-white p-3 w-full"
+          >
             {loading ? "Signing in..." : "Login"}
           </button>
+
+          <br/>
+          <p className="text-right text-sm">
+          <button
+            type="button"
+            onClick={handleForgotPassword}
+            className="text-blue-600 hover:underline"
+            disabled={loading}
+          >
+            Forgot Password?
+          </button>
+          </p>
+          <p className="text-center text-sm text-[#5A5A5A]">
+              Don't have an Account?{" "}
+              <Link to="/signup" className="text-[#2563EB] font-medium hover:underline">
+               Sign up
+              </Link>
+            </p>
         </form>
       </div>
     </div>

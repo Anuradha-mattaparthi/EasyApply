@@ -1,5 +1,5 @@
 import React, { useState }  from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
 
@@ -50,7 +50,7 @@ export default function Signup() {
       } else {
         Swal.fire({
           title: "Error!",
-          text: res.msg,
+          text: data.message || "Something went wrong",
           icon: "error",
           confirmButtonText: "OK"
         });
@@ -109,8 +109,15 @@ export default function Signup() {
               className="w-full bg-[#2563EB] text-white py-3 rounded-lg">
               Sign up
             </button>
+            <p className="text-center text-sm text-[#5A5A5A]">
+              Already have an account?{" "}
+              <Link to="/signin" className="text-[#2563EB] font-medium hover:underline">
+                Log in
+              </Link>
+            </p>
           </form>
 
+    
         </div>
       </div>
 

@@ -182,7 +182,7 @@ export default function AchievementsSection() {
             type="number"
             value={newAchievement.year}
             onChange={handleChange}
-            placeholder="Year (optional)"
+            placeholder="Year"
             className="editor-input"
           />
 
@@ -207,13 +207,13 @@ export default function AchievementsSection() {
               {achievements.map((ach) => (
                 <li
                   key={ach.id}
-                  className="bg-[#111] p-4 rounded flex justify-between items-center"
+                  className="bg-[#111] p-4 rounded flex justify-between items-center gap-4"
                 >
-                  <div>
+                  <div class="min-w-0 flex-1">
                     <p className="font-bold">{ach.title}</p>
 
                     {ach.description && (
-                      <p className="text-sm">{ach.description}</p>
+                      <p className="text-sm text-gray-300 break-all whitespace-pre-wrap mt-1">{ach.description}</p>
                     )}
 
                     {ach.year && (
@@ -227,7 +227,7 @@ export default function AchievementsSection() {
                     )}
                   </div>
 
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 shrink-0">
                     <button
                       onClick={() => editAchievement(ach)}
                       className="bg-blue-600 text-white px-3 py-1 rounded"

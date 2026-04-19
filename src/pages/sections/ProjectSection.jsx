@@ -237,7 +237,7 @@ export default function ProjectSection() {
                   )}
 
                   {project.bullets?.length > 0 && (
-                    <ul className="mt-2 list-disc ml-5 text-sm">
+                    <ul className="list-disc text-sm text-gray-300 break-all whitespace-pre-wrap mt-1">
                       {project.bullets.map((b, i) => (
                         <li key={i}>{b}</li>
                       ))}
