@@ -59,7 +59,7 @@ export default function JobDetail() {
         {/* 🔙 Back */}
         <button
           onClick={() => navigate(-1)}
-          className="mb-4 text-sm text-blue-600 hover:underline flex items-center gap-1"
+          className="bg-black text-white px-5 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-all mb-3"
         >
           ← Back to Dashboard
         </button>
