@@ -5,33 +5,32 @@ import Swal from "sweetalert2";
 
 export default function SummarySection() {
 
-  const [summary, setSummary] = useState({
-    summary_text: ""
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-right",
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true,
+    background: "#111",
+    color: "#fff",
   });
 
+  const [summary, setSummary] = useState({ summary_text: "" });
   const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   const API_URL = "/api/me/resume/summary/";
 
-  // ----------- GET SUMMARY -----------
   const fetchSummary = async () => {
     try {
       setLoading(true);
-
       const res = await API.get(API_URL);
-
       setSummary(res.data);
-
     } catch (error) {
-      console.log("Error fetching summary:", error);
-
-      Swal.fire({
-        title: "Error!",
-        text: "Failed to load summary",
+      Toast.fire({
         icon: "error",
-        confirmButtonText: "OK"
+        title: error.response?.data?.detail || "Failed to load summary"
       });
-
     } finally {
       setLoading(false);
     }
@@ -41,73 +40,53 @@ export default function SummarySection() {
     fetchSummary();
   }, []);
 
-  // ----------- HANDLE CHANGE -----------
   const handleChange = (e) => {
-    setSummary({
-      ...summary,
-      summary_text: e.target.value
-    });
+    setSummary({ ...summary, summary_text: e.target.value });
   };
 
-  // ----------- PATCH UPDATE -----------
-  const handlePatch = async () => {
-    try {
-      await API.patch(API_URL, summary);
-
-      Swal.fire({
-        title: "Success!",
-        text: "Summary Updated Successfully",
-        icon: "success",
-        confirmButtonText: "OK"
-      });
-
-    } catch (error) {
-      console.log("Patch Error:", error);
-
-      Swal.fire({
-        title: "Error!",
-        text: "Failed to update summary",
-        icon: "error",
-        confirmButtonText: "OK"
-      });
-    }
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    handlePatch();
+
+    if (!summary.summary_text.trim()) {
+      return Toast.fire({ icon: "warning", title: "Summary cannot be empty" });
+    }
+
+    try {
+      setSaving(true);
+      await API.patch(API_URL, summary);
+      Toast.fire({ icon: "success", title: "Summary updated successfully" });
+    } catch (error) {
+      const data = error.response?.data;
+      const msg =
+        data?.detail ||
+        data?.error ||
+        Object.values(data || {})?.[0]?.[0] ||
+        "Failed to update summary";
+      Toast.fire({ icon: "error", title: msg });
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
     <Accordion title="Professional Summary">
-
       {loading ? (
         <p>Loading...</p>
       ) : (
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-
-        <textarea
-          rows="5"
-          name="summary_text"
-          value={summary.summary_text}
-          onChange={handleChange}
-          placeholder="Write your professional summary..."
-          className="editor-textarea"
-        />
-
-        <div className="flex gap-4">
-
-          <button type="submit" className="editor-btn">
-            Save Summary
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <textarea
+            rows="5"
+            name="summary_text"
+            value={summary.summary_text}
+            onChange={handleChange}
+            placeholder="Write your professional summary..."
+            className="editor-textarea"
+          />
+          <button type="submit" disabled={saving} className="editor-btn">
+            {saving ? "Saving..." : "Save Summary"}
           </button>
-
-        </div>
-
-      </form>
-
+        </form>
       )}
-
     </Accordion>
   );
 }

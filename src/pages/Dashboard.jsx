@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import API, { logout } from "./services/api";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function Dashboard() {
   const [isEnabled, setIsEnabled] = useState(false);
@@ -57,32 +58,45 @@ export default function Dashboard() {
       setStatus("running");
   
       try {
-  
-        const res = await API.post("/api/agents/toggle/", {
-          enabled: true,
-        });
-        
-        const data = res.data; // optional
-  
+        await API.post("/api/agents/toggle/", { enabled: true });
         setStatus("done");
         setLastRun(new Date().toISOString());
+        
+        // ✅ Success Toast
+        Toast.fire({ icon: "success", title: "Job search enabled 🚀" });
+        
       } catch (err) {
         setIsEnabled(false);
         setStatus("error");
+        Toast.fire({ icon: "error", title: "Failed to enable agent" });
       }
     } else {
       setIsEnabled(false);
       setStatus("idle");
   
-      await API.post("/api/agents/toggle/", {
-        enabled: false,
-      });
+      try {
+        await API.post("/api/agents/toggle/", { enabled: false });
+        
+        // ✅ Disabled Toast
+        Toast.fire({ icon: "info", title: "Job search disabled" });
+      } catch (err) {
+        Toast.fire({ icon: "error", title: "Failed to disable agent" });
+      }
     }
   }
 
 const autoApply = jobs.filter(j => j.decision === "auto_apply");
 const notify = jobs.filter(j => j.decision === "notify");
 const rejected = jobs.filter(j => j.decision === "rejected");
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top",
+  showConfirmButton: false,
+  timer: 2000,
+  timerProgressBar: true,
+  background: "#0B0B0B",
+  color: "#ffffff",
+});
   return (
     <div className="min-h-screen bg-[#F2F2F2] font-mono px-6 py-16">
       <div className="max-w-7xl mx-auto">
@@ -255,11 +269,11 @@ const rejected = jobs.filter(j => j.decision === "rejected");
                     </div>
 
                     <button
-                      onClick={() => navigate(`/jobs/${job.job_id}`)}
-                      className="border border-gray-600 text-gray-300 hover:bg-white hover:text-black text-xs px-4 py-1.5 rounded-md transition"
-                    >
-                      View More
-                    </button>
+                    onClick={() => navigate(`/jobs/${job.job_id}`)}
+                    className="mt-4 w-fit bg-blue-600 text-white hover:bg-blue-700 text-xs px-4 py-1.5 rounded-md transition self-center"
+                  >
+                    View More
+                  </button>
                   </div>
                 ))
               )}

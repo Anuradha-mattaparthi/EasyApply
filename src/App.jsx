@@ -6,8 +6,6 @@ import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./routes/PrivateRoute";
 import ResumeEditor from "./pages/ResumeEditor";
 import ResumePreview from "./pages/ResumePreview";
-import VerifyOTP from "./pages/VerifyOTP";
-import ResetPassword from "./pages/ResetPassword";
 import JobDetail from "./pages/JobDetail";
 
 function App() {
@@ -17,8 +15,6 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/signin" element={<Signin />} />
-      <Route path="/verify-otp" element={<VerifyOTP />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/jobs/:jobId" element={<JobDetail />} />
       <Route
         path="/dashboard"

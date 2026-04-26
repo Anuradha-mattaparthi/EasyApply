@@ -27,8 +27,17 @@ export default function ResumeEditor() {
 
 
   <h1 className="text-2xl font-bold text-black mx-auto">
-    Resume Editor
+    Resume Editor 
   </h1>
+
+  <div className="justify-self-end">
+    <button
+      onClick={() => navigate("/preview")}
+      className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition text-sm font-semibold"
+    >
+      Preview Resume →
+    </button>
+  </div>
 </div>
 
       <div className="max-w-3xl mx-auto space-y-4">

@@ -122,17 +122,32 @@ export default function ResumePreview() {
         {/* SKILLS SECTION */}
         {skills.length > 0 && (
           <section className="mb-6">
-            <h2 className="text-md font-bold uppercase border-b border-gray-800 mb-2">Skills</h2>
-            <ul className="text-sm grid grid-cols-1 gap-1 list-none">
-              {skills.map((s) => (
-                <li key={s.id} className="break-words">
-                  <span className="font-semibold">• {s.category}:</span> {s.name}
-                </li>
+            {/* Section Heading */}
+            <h2 className="text-md font-bold uppercase border-b border-gray-800 mb-2">
+              Skills
+            </h2>
+            
+            <div className="text-sm space-y-1">
+              {Object.entries(
+                skills.reduce((acc, s) => {
+                  // 1. Capitalize first letter of category and default to "Technical"
+                  const rawCategory = s.category || "Technical";
+                  const category = rawCategory.charAt(0).toUpperCase() + rawCategory.slice(1);
+                  
+                  if (!acc[category]) acc[category] = [];
+                  acc[category].push(s.name);
+                  return acc;
+                }, {})
+              ).map(([category, names]) => (
+                <div key={category} className="leading-tight">
+                  {/* 2. Render with bullet point and bold category with First letter capital */}
+                  <span className="font-bold">• {category}: </span>
+                  <span className="text-gray-900">{names.join(", ")}</span>
+                </div>
               ))}
-            </ul>
+            </div>
           </section>
         )}
-
         {/* WORK EXPERIENCE */}
         {experiences.length > 0 && (
           <section className="mb-6">
